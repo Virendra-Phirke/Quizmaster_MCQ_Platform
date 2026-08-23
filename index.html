@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Viewport Configuration -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Mobile Web App Capable -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- App Information -->
+    <meta name="application-name" content="QuizMaster" />
+    <meta name="apple-mobile-web-app-title" content="QuizMaster" />
+    <meta name="description" content="Master your knowledge with expertly crafted multiple-choice questions" />
+    
+    <title>QuizMaster - Multiple Choice Quiz Platform</title>
+    
+    <!-- Permissions-Policy to handle unrecognized features gracefully -->
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    
+    <!-- Suppress benign console warnings from third-party libraries -->
+    <script>
+      // Suppress SES and Permissions-Policy warnings that don't affect functionality
+      const originalWarn = console.warn;
+      const originalError = console.error;
+      
+      console.warn = function(...args) {
+        const message = args[0]?.toString() || '';
+        // Suppress known harmless warnings from third-party libraries
+        if (
+          message.includes('Permissions-Policy') ||
+          message.includes('SES Removing unpermitted') ||
+          message.includes('Origin trial controlled feature')
+        ) {
+          return;
+        }
+        originalWarn.apply(console, args);
+      };
+      
+      console.error = function(...args) {
+        const message = args[0]?.toString() || '';
+        // Only suppress specific safe errors
+        if (message.includes('Permissions-Policy')) {
+          return;
+        }
+        originalError.apply(console, args);
+      };
+    </script>
+    
+    <!-- GitHub Pages SPA redirect script -->
+    <script>
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
