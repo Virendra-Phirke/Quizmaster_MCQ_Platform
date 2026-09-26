@@ -14,7 +14,15 @@ jobs:
     steps:
       - name: Ping Supabase
         run: |
-          curl \
-            -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
-            "${{ secrets.VITE_SUPABASE_URL }}/rest/v1/"
+          SUPABASE_URL="${{ secrets.VITE_SUPABASE_URL }}"
+          SUPABASE_KEY="${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "::warning::Supabase secrets are missing; skipping keep-alive ping."
+            exit 0
+          fi
+
+          curl --fail --silent --show-error \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: ******" \
+            "${SUPABASE_URL%/}/rest/v1/"
